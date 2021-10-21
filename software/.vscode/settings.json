@@ -6,6 +6,7 @@
         "istream": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "random": "cpp"
     }
 }
