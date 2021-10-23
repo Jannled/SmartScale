@@ -15,10 +15,10 @@
 
 #define ADDR_OFFSET 0
 #define ADDR_DIVIDER 2
-#define ADDR_WIFI_SSID 15
-#define ADDR_WIFI_PASSWD 63
 
 HX711 hx711;
+AsyncWebServer server(80);
+AsyncWebSocket ws("/ws");
 
 uint8_t state = 0;
 
@@ -34,6 +34,11 @@ void printWiFiStatus(bool verbose = false);
 
 size_t serialReadLine(char *buffer, size_t length);
 
+void notFound(AsyncWebServerRequest *request) {
+	Serial.printf("[Web] %8lu: %d %s %s \n", millis(), 404, request->methodToString(), request->url().c_str());
+    request->send(404, "text/plain", "Not found");
+}
+
 void setup() 
 {
 	pinMode(LED_BUILTIN, OUTPUT);
@@ -47,13 +52,9 @@ void setup()
 	/* --- Init EEPROM and read values --- */
 	uint16_t hx711_offset = 0;
 	uint16_t hx711_divider = 1;
-	char wifiSSID[32] = "Meister der Insel";
-	char wifiPasswd[64] = "0689441025218301";
 	EEPROM.begin(512);
 	//EEPROM.get(ADDR_OFFSET, hx711_offset);
 	//EEPROM.get(ADDR_DIVIDER, hx711_divider);
-	//EEPROM.get(ADDR_WIFI_SSID, wifiSSID);
-	//EEPROM.get(ADDR_WIFI_PASSWD, wifiPasswd);
 
 	/* --- Init HX711 --- */
 	hx711.begin(HX711_DOUT, HX711_SCK);
@@ -64,9 +65,17 @@ void setup()
 	Serial.printf("Initialized HX711 with offset %d and divider %d\n", hx711_offset, hx711_divider);
 	Serial.println("To open the configuration menu send an 'm' over the serial console.");
 
-	/* --- Init WiFi --- */
+	/* --- Init WiFi and Webserver --- */
 	//WiFi.setHostname("SmartKitchenScale");
-	WiFi.begin(wifiSSID, wifiPasswd);
+	WiFi.begin(); // Empty SSID and password should mean this thing will reconnect to the last known network
+	server.onNotFound(notFound);
+	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+		Serial.printf("[Web] %8lu: %d %s %s \n", millis(), 200, request->methodToString(), request->url().c_str());
+        request->send(200, "text/plain", "Hello, world");
+    });
+	server.begin();
+
+
 }
 
 void loop()
@@ -78,7 +87,6 @@ void loop()
 	if(lastWiFiState != wifiState)
 		printWiFiStatus(true);
 	lastWiFiState = wifiState;
-	
 
 	switch(state)
 	{

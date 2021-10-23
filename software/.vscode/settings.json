@@ -7,6 +7,13 @@
         "tuple": "cpp",
         "utility": "cpp",
         "string": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "memory": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp"
     }
 }
