@@ -1,42 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A smart Kitchen Scale based on an ESP32 µC and the HX711 ADC.">
     <title>SmartScale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
     <style>
         :root {
-            --accent-color: #f48065;
-            --backgr-color: #455b6a;
             --num-digits: 5;
         }
 
         html {
-            scroll-behavior: smooth;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            min-height: 100vh;
         }
 
         body {
-            background-color: var(--backgr-color);
-            height: 100vh;
             margin: 0;
+            position: relative;
+            min-height: inherit;
+            font-size: large;
+        }
 
-            display: flex;
-            flex-direction: column;
-
-            justify-content: space-between;
-
+        h1 {
+            font-size: 1.8rem;
             color: white;
-            font-size: 20pt;
-            font-family: sans-serif;
-            text-align: center;
+        }
+
+        header {
+            overflow: hidden;
+            background-color: #143642;
+        }
+
+        footer {
+            position: absolute;
+            box-sizing: border-box;
+            padding: 1rem;
+            bottom: 0;
+            width: 100%;
         }
 
         main {
+            padding: 30px;
+        }
+
+        section {
+            background-color: #F8F7F9;
+            box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+            padding-top: 10px;
+            padding-bottom: 20px;
+
+            margin: 0 auto 30px auto;
+            max-width: 600px;
+        }
+
+        button {
+            padding: 15px;
+            width: 100%;
+            max-width: 120px;
+            font-size: 24px;
+            text-align: center;
+            outline: none;
+            color: #fff;
+            background-color: #0f8b8d;
+            border: none;
+            border-bottom: 7px solid #094f50;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        button:active {
+            border-top: 2px solid rgba(255, 255, 255, 255);
+            border-bottom-width: 5px;
+        }
+
+        .state {
+            font-size: 1.5rem;
+            color: #8c8c8c;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 5px;
+            border-collapse: collapse;
+        }
+
+        summary {
+            font-size: x-large;
+        }
+
+        td:nth-child(2) {
+            text-align: right;
+        }
+
+        .gewicht {
             margin: 0 auto;
             text-align: right;
-
+            color: #143642;
 
             /* Fallback */
             width: 80%;
@@ -44,102 +113,55 @@
 
             /* Adjust the font and box of the text to the number of letters */
             width: calc(var(--num-digits) * 1ch);
-            font-size: min(calc(100vw / var(--num-digits)), 200pt);
-        }
-
-        h1 {
-            padding: 0.2em;
-            background-color: var(--accent-color);
-        }
-
-        footer {
-            padding: 1em;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 0;
-        }
-
-        a {
-            font-weight: bold;
-            color: inherit;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: var(--accent-color);
-        }
-
-        details {
-            overflow: auto;
-        }
-
-        details[open] {
-            flex-grow: 1;
-        }
-
-        summary {
-            background-color: var(--backgr-color);
-            position: sticky;
-            top: 0;
-        }
-
-        table {
-            padding: 1em;
-            width: 100%;
-        }
-
-        td:nth-child(2) {
-            text-align: right;
-        }
-
-        button {
-            padding: 0.5em;
-            margin: 0 auto;
-            font-size: larger;
-            border-radius: 20px;
-            border: none;
-            color: white;
-            background-color: var(--accent-color);
+            font-size: min(calc(100vw / var(--num-digits)), 200px);
         }
     </style>
 </head>
 
 <body>
-    <h1>SmartScale</h1>
-    <main>500g</main>
-    <button>Tare</button>
-    <details>
-        <summary>Tare Verlauf</summary>
-        <table>
-            <tr>
-                <td>Mehl</td>
-                <td>100g</td>
-                <td>Del</td>
-            </tr>
-            <tr>
-                <td>Milch</td>
-                <td>100g</td>
-                <td>Del</td>
-            </tr>
-            <tr>
-                <td>Zucker</td>
-                <td>100g</td>
-                <td>Del</td>
-            </tr>
-        </table>
-    </details>
+    <header>
+        <h1>SmartScale</h1>
+    </header>
+
+    <main>
+        <section>
+            <p class="gewicht">%---%</p>
+            <p><button>Tare</button></p>
+        </section>
+
+        <section>
+            <details>
+                <summary>Tare Verlauf</summary>
+                <table>
+                    <tr>
+                        <td>Mehl</td>
+                        <td>100g</td>
+                        <td>Del</td>
+                    </tr>
+                    <tr>
+                        <td>Milch</td>
+                        <td>169g</td>
+                        <td>Del</td>
+                    </tr>
+                    <tr>
+                        <td>Zucker</td>
+                        <td>42g</td>
+                        <td>Del</td>
+                    </tr>
+                </table>
+            </details>
+        </section>
+    </main>
+
     <footer>
-        <a href="http://42nibbles.de/" title="Website for the open lab at Fachhochschule Dortmund">42nibbles</a>
-        <a href="https://github.com/Jannled/SmartScale" title="Source code and design files over at GitHub">Source
-            Code</a>
+        <a href="http://42nibbles.de/" title="Website des offenen Labors an der Fachhochschule Dortmund">42nibbles</a>
+        <a href="https://github.com/Jannled/SmartScale" title="Quellcode und Design Dateien gibts auf GitHub">Source Code</a>
     </footer>
 
-    <!-- https://randomnerdtutorials.com/esp32-websocket-server-arduino/ -->
     <script>
         var gateway = `ws://${window.location.hostname}/ws`;
         var websocket;
-        
+
         function initWebSocket() {
             console.log('Trying to open a WebSocket connection...');
             websocket = new WebSocket(gateway);
@@ -183,5 +205,4 @@
         }
     </script>
 </body>
-
 </html>
