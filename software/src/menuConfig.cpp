@@ -252,7 +252,7 @@ size_t serialReadLine(char *buffer, size_t length)
 
 void printWiFiStatus(bool verbose)
 {
-	verbose ? Serial.print("[WiFi] ") : verbose; 
+	verbose ? Serial.print("[I think Wi can Fi] ") : Serial.print("xxx"); 
 	switch (WiFi.status())
 	{
 		case WL_NO_SHIELD:
