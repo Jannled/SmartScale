@@ -52,7 +52,7 @@ void setup()
 	hx711.set_scale(hx711_divider);
 
 	#ifndef DISABLE_ALL_SERIAL
-	Serial.printf("Initialized HX711 with offset %ld and divider %.2f\n", hx711_offset, hx711_divider);
+	Serial.printf("Initialized HX711 with offset %ld and divider %.6f\n", hx711_offset, hx711_divider);
 	Serial.println("To open the configuration menu send an 'm' over the serial console.");
 	#endif
 
