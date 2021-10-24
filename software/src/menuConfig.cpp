@@ -3,6 +3,9 @@
 
 uint8_t state = 0;
 
+//killallhumans = false
+
+#ifndef DISABLE_ALL_SERIAL
 void updateMenu()
 {
     switch(state)
@@ -11,8 +14,8 @@ void updateMenu()
 		case 1:
 			if (hx711.is_ready())
 			{
-				float val = hx711.get_units(5);
-				Serial.printf("Gewicht: %.2fg\n", val);
+				currentWeight = hx711.get_units(5);
+				Serial.printf("Gewicht: %.2fg\n", currentWeight);
 				delay(1500);
 			}
 			else
@@ -252,7 +255,7 @@ size_t serialReadLine(char *buffer, size_t length)
 
 void printWiFiStatus(bool verbose)
 {
-	verbose ? Serial.print("[I think Wi can Fi] ") : Serial.print("xxx"); 
+	verbose ? Serial.print("[WiFi] ") : Serial.print(""); 
 	switch (WiFi.status())
 	{
 		case WL_NO_SHIELD:
@@ -275,3 +278,4 @@ void printWiFiStatus(bool verbose)
 			break;
 	}
 }
+#endif

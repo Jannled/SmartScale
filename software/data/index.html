@@ -2,7 +2,9 @@
 <html lang="de">
 <head>
     <title>SmartScale</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A smart Kitchen Scale based on an ESP32 µC and the HX711 ADC.">
     <link rel="icon" href="data:,">
     <style>
         :root {
@@ -125,8 +127,8 @@
 
     <main>
         <section>
-            <p class="gewicht">%---%</p>
-            <p><button>Tare</button></p>
+            <p class="gewicht" id="state">%---%</p>
+            <p><button onclick="toggle()">Tare</button></p>
         </section>
 
         <section>
@@ -161,8 +163,10 @@
     <script>
         var gateway = `ws://${window.location.hostname}/ws`;
         var websocket;
+        window.addEventListener('load', onLoad);
 
-        function initWebSocket() {
+        function initWebSocket() 
+        {
             console.log('Trying to open a WebSocket connection...');
             websocket = new WebSocket(gateway);
             websocket.onopen = onOpen;
@@ -170,38 +174,30 @@
             websocket.onmessage = onMessage; // <-- add this line
         }
 
-        function onOpen(event) {
+        function onOpen(event) 
+        {
             console.log('Connection opened');
         }
 
-        function onClose(event) {
+        function onClose(event) 
+        {
             console.log('Connection closed');
             setTimeout(initWebSocket, 2000);
         }
 
-        function onMessage(event) {
-            var state;
-            if (event.data == "1") {
-                state = "ON";
-            }
-            else {
-                state = "OFF";
-            }
-            document.getElementById('state').innerHTML = state;
+        function onMessage(event) 
+        {
+            document.getElementById('state').innerHTML = event.data;
         }
 
-        window.addEventListener('load', onLoad);
-        function onLoad(event) {
+        function onLoad(event) 
+        {
             initWebSocket();
-            initButton();
         }
 
-        function initButton() {
-            document.getElementById('button').addEventListener('click', toggle);
-        }
-
-        function toggle() {
-            websocket.send('toggle');
+        function toggle() 
+        {
+            websocket.send('tare');
         }
     </script>
 </body>

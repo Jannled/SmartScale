@@ -19,6 +19,13 @@ extern HX711 hx711;
 extern AsyncWebServer server;
 extern AsyncWebSocket ws;
 
+extern float currentWeight;
+
 extern bool ledState;
+
+void notifyClients();
+void handleWebSocketMessage(void *arg, uint8_t *data, size_t len);
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
+String processor(const String &var);
 
 #endif // SMARTSCALE_MAIN_H
