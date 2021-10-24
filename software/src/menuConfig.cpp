@@ -1,3 +1,5 @@
+#include <EEPROM.h>
+
 #include "menuConfig.hpp"
 #include "main.hpp"
 
@@ -31,8 +33,7 @@ void updateMenu()
 					break;
 
 				case 't':
-					hx711.tare();
-					Serial.println("Tare");
+					tare();
 					delay(500);
 					break;
 					
@@ -74,7 +75,7 @@ void updateMenu()
 		/* 2. Calibrate Scale */
 		case 4:
 			static uint8_t internalState = 0;
-			static uint16_t offset = 0;
+			static long offset = 0;
 			static float divider = 1;
 
 			switch (internalState)
@@ -113,11 +114,23 @@ void updateMenu()
 					else if(Serial.read() != '\n')
 						break;
 
-				case 4:
-					Serial.printf("Calibration done. Offset: %d, Divider: %.2f.\n", offset, divider);
+				case 4: {
+					Serial.printf("Calibration done. Offset: %ld, Divider: %.2f.\n", offset, divider);
+					EEPROM.writeLong(ADDR_OFFSET, offset);
+					EEPROM.writeFloat(ADDR_DIVIDER, divider);
+					delay(200); // Neccesary to save
+					EEPROM.commit();
+					Serial.printf("Values written to EEPROM address %d-%d and %d-%d.\n", ADDR_OFFSET, ADDR_OFFSET+sizeof(offset), ADDR_DIVIDER, ADDR_DIVIDER+sizeof(offset));
 					internalState = 0;
 					state = 0;
-					break;
+
+					long hx711_offset = 0;
+					float hx711_divider = 0.0f;
+					EEPROM.get(ADDR_OFFSET, hx711_offset);
+					EEPROM.get(ADDR_DIVIDER, hx711_divider);
+					Serial.printf("%ld, %.2f\n", hx711_offset, hx711_divider);
+
+					break;}
 
 				default:
 					Serial.printf("[Calibration] Ended up in invalid state (%d). Resetting state machine.\n", internalState);

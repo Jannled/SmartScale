@@ -12,8 +12,9 @@
 #define LED_BUILTIN 2
 #endif
 
+#define EEPROM_SIZE 64
 #define ADDR_OFFSET 0
-#define ADDR_DIVIDER 2
+#define ADDR_DIVIDER 8
 
 extern HX711 hx711;
 extern AsyncWebServer server;
@@ -27,5 +28,7 @@ void notifyClients();
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len);
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
 String processor(const String &var);
+
+void tare();
 
 #endif // SMARTSCALE_MAIN_H

@@ -30,19 +30,20 @@ void setup()
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
 
+	EEPROM.begin(EEPROM_SIZE);
+
 	#ifndef DISABLE_ALL_SERIAL
 	Serial.begin(115200);
-	delay(100);
+	delay(500);
 	Serial.println();
 	Serial.println(" --- Smart Kitchen Scale ---");
 	#endif
 
 	/* --- Init EEPROM and read values --- */
-	uint16_t hx711_offset = 0;
-	uint16_t hx711_divider = 1;
-	EEPROM.begin(512);
-	//EEPROM.get(ADDR_OFFSET, hx711_offset);
-	//EEPROM.get(ADDR_DIVIDER, hx711_divider);
+	long hx711_offset = 0;
+	float hx711_divider = 1;
+	EEPROM.get(ADDR_OFFSET, hx711_offset);
+	EEPROM.get(ADDR_DIVIDER, hx711_divider);
 
 	/* --- Init HX711 --- */
 	hx711.begin(HX711_DOUT, HX711_SCK);
@@ -51,7 +52,7 @@ void setup()
 	hx711.set_scale(hx711_divider);
 
 	#ifndef DISABLE_ALL_SERIAL
-	Serial.printf("Initialized HX711 with offset %d and divider %d\n", hx711_offset, hx711_divider);
+	Serial.printf("Initialized HX711 with offset %ld and divider %.2f\n", hx711_offset, hx711_divider);
 	Serial.println("To open the configuration menu send an 'm' over the serial console.");
 	#endif
 
@@ -86,11 +87,11 @@ void loop()
 	ws.cleanupClients();
 
 	unsigned long currTime = millis();
-	if(abs(currTime - time01) > 200)
+	if(abs(currTime - time01) > 500)
 	{
 		time01 = currTime;
 		currentWeight = hx711.get_units(5);
-		ws.textAll(String(currentWeight));
+		notifyClients();
 	}
 
 	#ifndef DISABLE_ALL_SERIAL
@@ -100,7 +101,7 @@ void loop()
 
 void notifyClients()
 {
-	ws.textAll(String(currentWeight));
+	ws.textAll(String((int) currentWeight));
 }
 
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
@@ -111,7 +112,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
 		data[len] = 0; // Propably to \0 terminate the String
 		if (strcmp((char *)data, "tare") == 0)
 		{
-			hx711.tare();
+			tare();
 		}
 	}
 }
@@ -149,4 +150,11 @@ String processor(const String &var)
 	}
 
 	return ">>NONE<<";
+}
+
+void tare() {
+	hx711.tare();
+	#ifndef DISABLE_ALL_SERIAL
+	Serial.printf("Tare, new offset is %.ld\n", hx711.get_offset());
+	#endif
 }
