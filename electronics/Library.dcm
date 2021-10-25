@@ -1,0 +1,11 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP DW01-P
+F https://cdn.sparkfun.com/assets/learn_tutorials/2/5/1/DW01-P_DataSheet_V10.pdf
+$ENDCMP
+#
+$CMP MIC37100
+F http://ww1.microchip.com/downloads/en/DeviceDoc/mic37100.pdf
+$ENDCMP
+#
+#End Doc Library

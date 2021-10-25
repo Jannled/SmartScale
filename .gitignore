@@ -37,3 +37,10 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+
+# KiCad
+*.bck
+*.sch-bak
+*.kicad_pcb-bak
+fp-info-cache
+!electronics/*.lib
