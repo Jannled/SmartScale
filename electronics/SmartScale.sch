@@ -514,81 +514,37 @@ HX711_DOUT
 Text GLabel 4350 2700 2    50   Output ~ 0
 HX711_SCK
 $Comp
-L SmartScale-rescue:USB_C_Plug_USB2.0-Connector P1
-U 1 1 60D8DC55
-P 1350 6350
-F 0 "P1" H 1457 7217 50  0000 C CNN
-F 1 "USB_C_Plug_USB2.0" H 1457 7126 50  0000 C CNN
-F 2 "Connector_USB:USB_C_Receptacle_GCT_USB4085" H 1500 6350 50  0001 C CNN
-F 3 "https://www.usb.org/sites/default/files/documents/usb_type-c.zip" H 1500 6350 50  0001 C CNN
-	1    1350 6350
-	1    0    0    -1  
-$EndComp
-$Comp
 L SmartScale-rescue:GND-power #PWR03
 U 1 1 60DA606D
-P 1200 7450
-F 0 "#PWR03" H 1200 7200 50  0001 C CNN
-F 1 "GND" H 1205 7277 50  0000 C CNN
-F 2 "" H 1200 7450 50  0001 C CNN
-F 3 "" H 1200 7450 50  0001 C CNN
-	1    1200 7450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1050 7250 1050 7350
-Wire Wire Line
-	1050 7350 1200 7350
-Wire Wire Line
-	1200 7350 1200 7450
-Wire Wire Line
-	1200 7350 1350 7350
-Wire Wire Line
-	1350 7350 1350 7250
-Connection ~ 1200 7350
-$Comp
-L SmartScale-rescue:TestPoint-Connector TP3
-U 1 1 60F8EC42
-P 2500 5950
-F 0 "TP3" V 2500 6150 50  0000 L CNN
-F 1 "TestPoint" H 2050 5300 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 2700 5950 50  0001 C CNN
-F 3 "~" H 2700 5950 50  0001 C CNN
-	1    2500 5950
-	1    0    0    -1  
-$EndComp
-$Comp
-L SmartScale-rescue:TestPoint-Connector TP4
-U 1 1 60F96899
-P 2500 6050
-F 0 "TP4" V 2500 6250 50  0000 L CNN
-F 1 "TestPoint" H 2600 6700 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 2700 6050 50  0001 C CNN
-F 3 "~" H 2700 6050 50  0001 C CNN
-	1    2500 6050
-	-1   0    0    1   
+P 3300 5100
+F 0 "#PWR03" H 3300 4850 50  0001 C CNN
+F 1 "GND" H 3305 4927 50  0000 C CNN
+F 2 "" H 3300 5100 50  0001 C CNN
+F 3 "" H 3300 5100 50  0001 C CNN
+	1    3300 5100
+	0    -1   -1   0   
 $EndComp
 $Comp
 L SmartScale-rescue:TestPoint-Connector TP1
 U 1 1 60F97654
-P 1950 6250
-F 0 "TP1" V 1950 6450 50  0000 L CNN
-F 1 "TestPoint" V 2500 6350 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 2150 6250 50  0001 C CNN
-F 3 "~" H 2150 6250 50  0001 C CNN
-	1    1950 6250
-	0    1    1    0   
+P 1550 5700
+F 0 "TP1" V 1550 5900 50  0000 L CNN
+F 1 "TestPoint" V 1550 6100 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 1750 5700 50  0001 C CNN
+F 3 "~" H 1750 5700 50  0001 C CNN
+	1    1550 5700
+	0    -1   -1   0   
 $EndComp
 $Comp
 L SmartScale-rescue:TestPoint-Connector TP2
 U 1 1 60F98232
-P 1950 6450
-F 0 "TP2" V 1950 6650 50  0000 L CNN
-F 1 "TestPoint" V 2400 6550 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 2150 6450 50  0001 C CNN
-F 3 "~" H 2150 6450 50  0001 C CNN
-	1    1950 6450
-	0    1    1    0   
+P 1550 5600
+F 0 "TP2" V 1550 5800 50  0000 L CNN
+F 1 "TestPoint" V 1550 6000 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 1750 5600 50  0001 C CNN
+F 3 "~" H 1750 5600 50  0001 C CNN
+	1    1550 5600
+	0    -1   -1   0   
 $EndComp
 $Comp
 L SmartScale-rescue:TestPoint-Connector GP26
@@ -768,13 +724,13 @@ $EndComp
 $Comp
 L SmartScale-rescue:+5V-power #PWR06
 U 1 1 6164D2F2
-P 2100 5650
-F 0 "#PWR06" H 2100 5500 50  0001 C CNN
-F 1 "+5V" V 2115 5778 50  0000 L CNN
-F 2 "" H 2100 5650 50  0001 C CNN
-F 3 "" H 2100 5650 50  0001 C CNN
-	1    2100 5650
-	1    0    0    -1  
+P 1550 5400
+F 0 "#PWR06" H 1550 5250 50  0001 C CNN
+F 1 "+5V" V 1565 5528 50  0000 L CNN
+F 2 "" H 1550 5400 50  0001 C CNN
+F 3 "" H 1550 5400 50  0001 C CNN
+	1    1550 5400
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Library:SW_Push_JTP-1130 SW2
@@ -801,57 +757,38 @@ $EndComp
 $Comp
 L SmartScale-rescue:R-Device R4
 U 1 1 616B3E2D
-P 2650 5950
-F 0 "R4" V 2443 5950 50  0000 C CNN
-F 1 "5.1" V 2534 5950 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 2580 5950 50  0001 C CNN
-F 3 "~" H 2650 5950 50  0001 C CNN
-	1    2650 5950
+P 950 5500
+F 0 "R4" V 743 5500 50  0000 C CNN
+F 1 "5.1" V 834 5500 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 880 5500 50  0001 C CNN
+F 3 "~" H 950 5500 50  0001 C CNN
+	1    950  5500
 	0    1    1    0   
 $EndComp
 $Comp
 L SmartScale-rescue:R-Device R5
 U 1 1 616B5778
-P 2650 6050
-F 0 "R5" V 2750 6050 50  0000 C CNN
-F 1 "5.1" V 2850 6050 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 2580 6050 50  0001 C CNN
-F 3 "~" H 2650 6050 50  0001 C CNN
-	1    2650 6050
+P 3100 5100
+F 0 "R5" V 3200 5100 50  0000 C CNN
+F 1 "5.1" V 3300 5100 50  0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 3030 5100 50  0001 C CNN
+F 3 "~" H 3100 5100 50  0001 C CNN
+	1    3100 5100
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	1950 5750 2100 5750
-Wire Wire Line
-	2100 5750 2100 5650
-Wire Wire Line
-	2500 5950 1950 5950
-Connection ~ 2500 5950
-Wire Wire Line
-	1950 6050 2500 6050
-Connection ~ 2500 6050
 $Comp
 L SmartScale-rescue:GND-power #PWR08
 U 1 1 616FD108
-P 2900 6000
-F 0 "#PWR08" H 2900 5750 50  0001 C CNN
-F 1 "GND" V 2905 5872 50  0000 R CNN
-F 2 "" H 2900 6000 50  0001 C CNN
-F 3 "" H 2900 6000 50  0001 C CNN
-	1    2900 6000
-	0    -1   -1   0   
+P 750 5500
+F 0 "#PWR08" H 750 5250 50  0001 C CNN
+F 1 "GND" V 755 5372 50  0000 R CNN
+F 2 "" H 750 5500 50  0001 C CNN
+F 3 "" H 750 5500 50  0001 C CNN
+	1    750  5500
+	0    1    1    0   
 $EndComp
 Wire Wire Line
-	2800 5950 2850 5950
-Wire Wire Line
-	2850 5950 2850 6000
-Wire Wire Line
-	2850 6000 2900 6000
-Wire Wire Line
-	2850 6000 2850 6050
-Wire Wire Line
-	2850 6050 2800 6050
-Connection ~ 2850 6000
+	800  5500 750  5500
 Wire Wire Line
 	3000 1800 3150 1800
 NoConn ~ 6600 2100
@@ -1183,7 +1120,7 @@ L Connector:TestPoint TP6
 U 1 1 61AE11F0
 P 3750 6700
 F 0 "TP6" V 3750 7050 50  0000 C CNN
-F 1 "TestPoint" V 3750 7350 50  0000 C CNN
+F 1 "TestPoint" V 3500 6850 50  0000 C CNN
 F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 3950 6700 50  0001 C CNN
 F 3 "~" H 3950 6700 50  0001 C CNN
 	1    3750 6700
@@ -1194,7 +1131,7 @@ L Connector:TestPoint TP5
 U 1 1 61ADEAA4
 P 3750 6550
 F 0 "TP5" V 3750 6900 50  0000 C CNN
-F 1 "TestPoint" V 3750 7200 50  0000 C CNN
+F 1 "TestPoint" V 3450 6700 50  0000 C CNN
 F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 3950 6550 50  0001 C CNN
 F 3 "~" H 3950 6550 50  0001 C CNN
 	1    3750 6550
@@ -1606,4 +1543,161 @@ F 3 "https://www.infineon.com/dgdl/irlml0030pbf.pdf?fileId=5546d462533600a401535
 	1    7850 5550
 	0    -1   -1   0   
 $EndComp
+$Comp
+L SmartScale-rescue:632723100011-Mouser IC2
+U 1 1 618CB44B
+P 1550 5100
+F 0 "IC2" H 2200 5365 50  0000 C CNN
+F 1 "632723100011" H 2200 5274 50  0000 C CNN
+F 2 "Wuerth:632723100011" H 2700 5200 50  0001 L CNN
+F 3 "https://componentsearchengine.com/Datasheets/1/632723100011.pdf" H 2700 5100 50  0001 L CNN
+F 4 "WURTH ELEKTRONIK - 632723100011 - USB Connector, USB Type C, USB 3.1, Receptacle, 24 Ways, Surface Mount, Through Hole Mount" H 2700 5000 50  0001 L CNN "Description"
+F 5 "3.11" H 2700 4900 50  0001 L CNN "Height"
+F 6 "710-632723100011" H 2700 4800 50  0001 L CNN "Mouser Part Number"
+F 7 "https://www.mouser.co.uk/ProductDetail/Wurth-Elektronik/632723100011?qs=NK6InXoXhq4o62C9ULXLjQ%3D%3D" H 2700 4700 50  0001 L CNN "Mouser Price/Stock"
+F 8 "Wurth Elektronik" H 2700 4600 50  0001 L CNN "Manufacturer_Name"
+F 9 "632723100011" H 2700 4500 50  0001 L CNN "Manufacturer_Part_Number"
+	1    1550 5100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 5100 3250 5100
+Wire Wire Line
+	1550 6200 1500 6200
+Wire Wire Line
+	1500 6200 1500 6250
+Wire Wire Line
+	1500 6300 1550 6300
+Wire Wire Line
+	2850 6000 2900 6000
+Wire Wire Line
+	2900 6000 2900 5900
+Wire Wire Line
+	2900 5800 2850 5800
+Wire Wire Line
+	2850 5900 2900 5900
+Connection ~ 2900 5900
+Wire Wire Line
+	2900 5900 2900 5800
+$Comp
+L power:GND #PWR0101
+U 1 1 61A3AFF5
+P 1550 5100
+F 0 "#PWR0101" H 1550 4850 50  0001 C CNN
+F 1 "GND" V 1555 4972 50  0000 R CNN
+F 2 "" H 1550 5100 50  0001 C CNN
+F 3 "" H 1550 5100 50  0001 C CNN
+	1    1550 5100
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+5V #PWR0102
+U 1 1 61A3CDAB
+P 1550 6600
+F 0 "#PWR0102" H 1550 6450 50  0001 C CNN
+F 1 "+5V" H 1565 6773 50  0000 C CNN
+F 2 "" H 1550 6600 50  0001 C CNN
+F 3 "" H 1550 6600 50  0001 C CNN
+	1    1550 6600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:+5V #PWR0103
+U 1 1 61A4890A
+P 1550 5900
+F 0 "#PWR0103" H 1550 5750 50  0001 C CNN
+F 1 "+5V" V 1565 6028 50  0000 L CNN
+F 2 "" H 1550 5900 50  0001 C CNN
+F 3 "" H 1550 5900 50  0001 C CNN
+	1    1550 5900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:+5V #PWR0104
+U 1 1 61A4A683
+P 2850 5500
+F 0 "#PWR0104" H 2850 5350 50  0001 C CNN
+F 1 "+5V" V 2865 5628 50  0000 L CNN
+F 2 "" H 2850 5500 50  0001 C CNN
+F 3 "" H 2850 5500 50  0001 C CNN
+	1    2850 5500
+	0    1    1    0   
+$EndComp
+NoConn ~ 1550 5200
+NoConn ~ 1550 5300
+NoConn ~ 1550 5800
+NoConn ~ 1550 6000
+NoConn ~ 1550 6100
+NoConn ~ 1550 6500
+NoConn ~ 1550 6400
+Wire Wire Line
+	2850 6400 2900 6400
+Wire Wire Line
+	2900 6400 2900 6300
+Wire Wire Line
+	2900 6100 2850 6100
+Wire Wire Line
+	2850 6200 2900 6200
+Connection ~ 2900 6200
+Wire Wire Line
+	2900 6200 2900 6100
+Wire Wire Line
+	2850 6300 2900 6300
+Connection ~ 2900 6300
+$Comp
+L power:GND #PWR0105
+U 1 1 61AAC478
+P 2900 6600
+F 0 "#PWR0105" H 2900 6350 50  0001 C CNN
+F 1 "GND" V 2905 6472 50  0000 R CNN
+F 2 "" H 2900 6600 50  0001 C CNN
+F 3 "" H 2900 6600 50  0001 C CNN
+	1    2900 6600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR0106
+U 1 1 61AADBBE
+P 2900 5900
+F 0 "#PWR0106" H 2900 5650 50  0001 C CNN
+F 1 "GND" V 2905 5772 50  0000 R CNN
+F 2 "" H 2900 5900 50  0001 C CNN
+F 3 "" H 2900 5900 50  0001 C CNN
+	1    2900 5900
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 2850 5400
+NoConn ~ 2850 5600
+NoConn ~ 2850 5700
+$Comp
+L power:GND #PWR0107
+U 1 1 61ACDFBA
+P 1500 6250
+F 0 "#PWR0107" H 1500 6000 50  0001 C CNN
+F 1 "GND" V 1505 6122 50  0000 R CNN
+F 2 "" H 1500 6250 50  0001 C CNN
+F 3 "" H 1500 6250 50  0001 C CNN
+	1    1500 6250
+	0    1    1    0   
+$EndComp
+Connection ~ 1500 6250
+Wire Wire Line
+	1500 6250 1500 6300
+Wire Wire Line
+	2900 6200 2900 6300
+Wire Wire Line
+	2850 6600 2900 6600
+Wire Wire Line
+	2900 6600 2900 6500
+Connection ~ 2900 6400
+Wire Wire Line
+	2850 6500 2900 6500
+Connection ~ 2900 6500
+Wire Wire Line
+	2900 6500 2900 6400
+Connection ~ 2900 6600
+Wire Wire Line
+	1100 5500 1550 5500
+Wire Wire Line
+	2850 5100 2950 5100
 $EndSCHEMATC

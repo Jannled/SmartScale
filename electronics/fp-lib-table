@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name Wuerth)(type KiCad)(uri C:/Users/Jannled/Nextcloud/Freigaben/FHDO/Mouser/632723100011/KiCad)(options "")(descr ""))
+  (lib (name FHDO)(type KiCad)(uri "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale")(options "")(descr ""))
+)

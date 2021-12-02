@@ -1,4 +1,5 @@
 (sym_lib_table
   (lib (name Library)(type Legacy)(uri ${KIPRJMOD}/Library.lib)(options "")(descr ""))
   (lib (name SmartScale-rescue)(type Legacy)(uri ${KIPRJMOD}/SmartScale-rescue.lib)(options "")(descr ""))
+  (lib (name Mouser)(type Legacy)(uri C:/Users/Jannled/Nextcloud/Freigaben/FHDO/LIB_632723100011/632723100011/KiCad/632723100011.lib)(options "")(descr ""))
 )
