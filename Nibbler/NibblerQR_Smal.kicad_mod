@@ -1,0 +1,8 @@
+(module NibblerQR_Smal (layer F.Cu) (tedit 0)
+  (fp_text reference "" (at 0 0) (layer F.SilkS)
+    (effects (font (size 1.27 1.27) (thickness 0.15)))
+  )
+  (fp_text value http://42nibbles.de (at 0 0) (layer F.SilkS)
+    (effects (font (size 1.27 1.27) (thickness 0.15)))
+  )
+)
