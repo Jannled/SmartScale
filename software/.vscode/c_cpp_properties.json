@@ -8,14 +8,14 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/include",
-                "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/src",
+                "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/include",
+                "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/src",
                 "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src",
-                "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src",
+                "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src",
                 "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/AsyncTCP-esphome/src",
-                "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/HX711/src",
+                "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/AsyncTCP-esphome/src",
+                "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/HX711/src",
                 "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config",
                 "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_trace",
                 "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_update",
@@ -110,14 +110,14 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/include",
-                    "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/src",
+                    "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/include",
+                    "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/src",
                     "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/libraries/EEPROM/src",
-                    "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src",
+                    "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/ESPAsyncWebServer-esphome/src",
                     "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                    "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/AsyncTCP-esphome/src",
-                    "C:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/HX711/src",
+                    "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/AsyncTCP-esphome/src",
+                    "c:/Users/Jannled/Nextcloud/FH/Seminar Technische Anwendungen/SmartScale/software/.pio/libdeps/esp32dev/HX711/src",
                     "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/config",
                     "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_trace",
                     "C:/Users/Jannled/.platformio/packages/framework-arduinoespressif32/tools/sdk/include/app_update",
@@ -211,7 +211,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=50202",
+                "PLATFORMIO=50204",
                 "ARDUINO_ESP32_DEV",
                 "ESP32",
                 "ESP_PLATFORM",
