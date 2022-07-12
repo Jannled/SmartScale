@@ -2594,7 +2594,11 @@
     (uuid fead07ab-5a70-40db-ada8-c72dcc827bfc)
   )
 
-  (text "TP Lademodul" (at 154.94 139.7 0)
+  (text "Alternativen:\nIRLML 0100" (at 203.2 143.51 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 01686e47-a235-4821-830f-7420314a62c7)
+  )
+  (text "TP Lademodul" (at 96.52 143.51 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 25c663ff-96b6-4263-a06e-d1829409cf73)
   )
@@ -2615,6 +2619,10 @@
   (text "Input: > 1uF\nOutput: > 10uF" (at 250.19 123.19 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid aadc3df5-0e2d-4f3d-b72e-6f184da74c89)
+  )
+  (text "LiPo Protection" (at 154.94 113.03 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid aec87296-7157-489f-ae8b-7d174457c7a2)
   )
   (text "130mA\n250mA\n300mA\n400mA\n580mA\n690mA\n780mA\n900mA\n1000mA"
     (at 135.89 193.04 0)

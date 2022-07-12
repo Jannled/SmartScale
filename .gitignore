@@ -44,3 +44,8 @@
 *.kicad_pcb-bak
 fp-info-cache
 !electronics/*.lib
+
+# KiCad Backups
+**/*backups/*.zip 
+
+

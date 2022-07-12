@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.toml": "ini",
         "array": "cpp",
         "*.tcc": "cpp",
         "functional": "cpp",
@@ -19,6 +20,8 @@
         "fstream": "cpp",
         "ostream": "cpp",
         "sstream": "cpp",
-        "streambuf": "cpp"
+        "streambuf": "cpp",
+        "algorithm": "cpp",
+        "optional": "cpp"
     }
 }
