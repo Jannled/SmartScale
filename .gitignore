@@ -46,6 +46,6 @@ fp-info-cache
 !electronics/*.lib
 
 # KiCad Backups
-**/*backups/*.zip 
+**/*-backups/*.zip 
 
 

@@ -11,23 +11,11 @@ static bool killallhumans = false;
 volatile static uint16_t menuState = 0;
 
 #define NUM_STATES 9
-uint16_t (*stateMachine[NUM_STATES]) (uint16_t currState);
 
 void initMenu()
 {
-    Serial.println("Init Menu");
-    menuState = 0;
-
-	stateMachine[0] = waitForInput;
-	stateMachine[1] = printCurrentWeight;
-	stateMachine[2] = printMenu;
-	stateMachine[3] = menuWaitForInput;
-	stateMachine[4] = calibrateScale;
-	stateMachine[5] = changeWifiSettings;
-	stateMachine[6] = printWifiInfo;
-	stateMachine[7] = printWifiNetworks;
-	stateMachine[8] = disableHX711;
-	stateMachine[9] = closeMenu;
+	Serial.println("Init Menu");
+	menuState = 0;
 }
 
 void printMenuInfo()
@@ -38,19 +26,20 @@ void printMenuInfo()
 
 uint16_t waitForInput(uint16_t currState)
 {
-	const int b = Serial.read();
-	Serial.print(b);
-
-	switch(b)
+	switch(Serial.read())
 	{
 		case 'm':
-			return 2;
+			return 3;
 
 		case 't':
 			tare();
 			delay(500);
 			break;
+
+		default:
+			break;
 	}
+
 	return currState;
 }
 
@@ -70,6 +59,7 @@ uint16_t printCurrentWeight(uint16_t currState)
 
 uint16_t printMenu(uint16_t currState)
 {
+	Serial.println();
 	Serial.println("Choose one of the following options by entering their number:");
 	Serial.println("1. Output current weight readings");
 	Serial.println("2. Calibrate Scale");
@@ -77,9 +67,9 @@ uint16_t printMenu(uint16_t currState)
 	Serial.println("4. Print WiFi Status");
 	Serial.println("5. List all WiFi Stations");
 	Serial.println("6. Turn off HX711");
-	Serial.println("7. EXIT menue");
+	Serial.println("7. EXIT menu");
 	
-	return 3;
+	return 4;
 }
 
 uint16_t menuWaitForInput(uint16_t currState)
@@ -89,13 +79,13 @@ uint16_t menuWaitForInput(uint16_t currState)
 	uint16_t userInput = Serial.read() - '0';
 
 	const int stateConversion[] = {
-		1, 		// 1. Output current weight readings
-		4, 		// 2. Calibrate Scale
-		5, 		// 3. Change WiFi SSID and Password
-		6, 		// 4. Print WiFi Status
-		7, 		// 5. List all WiFi Stations
-		8, 		// 6. Turn off HX711
-		9  		// 7. EXIT
+		3, 		// 1. Output current weight readings
+		5, 		// 2. Calibrate Scale
+		6, 		// 3. Change WiFi SSID and Password
+		7, 		// 4. Print WiFi Status
+		8, 		// 5. List all WiFi Stations
+		9, 		// 6. Turn off HX711
+		1  		// 7. EXIT
 	};
 
 	if(userInput < 7)
@@ -131,7 +121,7 @@ uint16_t calibrateScale(uint16_t currState)
 		case 2:
 			Serial.println("[Calibration] Now put a known weight on the scale and enter the weight in gramm or just press enter to continue...");
 
-		case 3: 
+		case 3:
 			internalState = 3;
 			if((Serial.peek() >= '0' && Serial.peek() <= '9') || Serial.peek() == '+' || Serial.peek() == '-')
 			{
@@ -147,6 +137,12 @@ uint16_t calibrateScale(uint16_t currState)
 				break;
 
 		case 4: {
+			if(divider == 0.0f)
+			{
+				Serial.printf("Calibration failed, divider is Zero! Offset: %ld\n", offset);
+				return 1;
+			}
+
 			Serial.printf("Calibration done. Offset: %ld, Divider: %.2f.\n", offset, divider);
 			EEPROM.writeLong(ADDR_OFFSET, offset);
 			EEPROM.writeFloat(ADDR_DIVIDER, divider);
@@ -160,12 +156,12 @@ uint16_t calibrateScale(uint16_t currState)
 			EEPROM.get(ADDR_OFFSET, hx711_offset);
 			EEPROM.get(ADDR_DIVIDER, hx711_divider);
 			Serial.printf("%ld, %.2f\n", hx711_offset, hx711_divider);
-			return 0;
+			return 1;
 		}
 
 		default:
 			Serial.printf("[Calibration] Ended up in invalid state (%d). Resetting state machine.\n", internalState);
-			return 0;
+			return 1;
 	}
 	return currState;
 }
@@ -173,8 +169,8 @@ uint16_t calibrateScale(uint16_t currState)
 uint16_t changeWifiSettings(uint16_t currState)
 {
 	unsigned long timeout = Serial.getTimeout();
-	Serial.setTimeout(60000); // Warte 1 Minute auf Input
-	while(Serial.available()) Serial.read(); // Make sure Serial is empty
+	Serial.setTimeout(60000);					// Wait 1 minute for input
+	while(Serial.available()) Serial.read();	// Make sure Serial is empty
 
 	char wifiSSID[32] = {0};
 	char wifiPasswd[64] = {0};
@@ -184,7 +180,7 @@ uint16_t changeWifiSettings(uint16_t currState)
 	if(strlen(wifiSSID) < 1)
 	{
 		Serial.println("Abort, no SSID was entered.");
-		return currState;
+		return 1;
 	}
 
 	Serial.printf("Please enter the password for %s, followed by a line break: \n", wifiSSID);
@@ -192,7 +188,7 @@ uint16_t changeWifiSettings(uint16_t currState)
 
 	WiFi.disconnect();
 
-	Serial.printf("Connection to %s with password ", wifiSSID);
+	Serial.printf("Connecting to %s with password ", wifiSSID);
 	for(int i=0; i<strlen(wifiPasswd); i++)
 		Serial.print("*");
 	Serial.println(".");
@@ -200,7 +196,7 @@ uint16_t changeWifiSettings(uint16_t currState)
 	delay(100);
 	Serial.setTimeout(timeout);
 	WiFi.begin(wifiSSID, wifiPasswd);
-	return 0;
+	return 1;
 }
 
 uint16_t printWifiInfo(uint16_t currState)
@@ -213,7 +209,7 @@ uint16_t printWifiInfo(uint16_t currState)
 	Serial.println(WiFi.localIPv6());
 	Serial.print("MAC address: ");
 	Serial.println(WiFi.macAddress());
-	return 0;
+	return 1;
 }
 
 uint16_t printWifiNetworks(uint16_t currState)
@@ -229,14 +225,14 @@ uint16_t printWifiNetworks(uint16_t currState)
 			Serial.println(WiFi.SSID(i));
 	}
 	Serial.println();
-	return 0;
+	return 1;
 }
 
 uint16_t disableHX711(uint16_t currState)
 {
 	Serial.println("Turning off HX711");
 	hx711.power_down();
-	return 0;
+	return 1;
 }
 
 uint16_t invalidState(uint16_t currState)
@@ -251,121 +247,101 @@ uint16_t invalidState(uint16_t currState)
 
 void updateMenu()
 {
-    static int menuState;
+	switch(menuState)
+	{
+		case 0:
+			menuState = waitForInput(menuState);
+			break;
 
-    Serial.print("Update Menu: ");
-    Serial.println(menuState);
-    Serial.flush();
-    delay(10);
+		case 1:
+			menuState = closeMenu(menuState);
 
-    switch(menuState)
-    {
-        case 0:
-            menuState = waitForInput(menuState);
-            break;
+		case 2:
+			menuState = printCurrentWeight(menuState);
+			break;
 
-        case 1:
-            menuState = printCurrentWeight(menuState);
-            break;
+		case 3:
+			menuState = printMenu(menuState);
+			break;
 
-        case 2:
-            menuState = printMenu(menuState);
-            break;
+		case 4:
+			menuState = menuWaitForInput(menuState);
+			break;
 
-        case 3:
-            menuState = menuWaitForInput(menuState);
-            break;
+		case 5:
+			menuState = calibrateScale(menuState);
+			break;
 
-        case 4:
-            menuState = calibrateScale(menuState);
-            break;
+		case 6:
+			menuState = changeWifiSettings(menuState);
+			break;
 
-        case 5:
-            menuState = changeWifiSettings(menuState);
-            break;
+		case 7:
+			menuState = printWifiInfo(menuState);
+			break;
+		
+		case 8:
+			menuState = printWifiNetworks(menuState);
+			break;
 
-        case 6:
-            menuState = printWifiInfo(menuState);
-            break;
-        
-        case 7:
-            menuState = printWifiNetworks(menuState);
-            break;
-
-        case 8:
-            menuState = disableHX711(menuState);
-            break;
-
-        case 9:
-            menuState = closeMenu(menuState);
-            break;
-    
-        default:
-            break;
-    }
-
-    if(menuState < NUM_STATES)
-    {
-		menuState = stateMachine[menuState](menuState);
-        Serial.println(menuState);
-        Serial.flush();
-    }
-	else
-    {
-        Serial.println("La Legion");
-        Serial.flush();
-        invalidState(menuState);
-    }
+		case 9:
+			menuState = disableHX711(menuState);
+			break;
+	
+		default:
+			invalidState(menuState);
+			break;
+	}
 }
 
 int serialTimedRead()
 {
-    int c;
-    static unsigned long _startMillis = millis();
-    do {
-        c = Serial.read();
-        if(c >= 0) {
-            return c;
-        }
-    } while(millis() - _startMillis < Serial.getTimeout());
-    return -1;     // -1 indicates timeout
+	int c;
+	static unsigned long _startMillis = millis();
+	do {
+		c = Serial.read();
+		if(c >= 0) {
+			return c;
+		}
+	} while(millis() - _startMillis < Serial.getTimeout());
+	return -1;     // -1 indicates timeout
 }
 
 int serialTimedPeak()
 {
-    int c;
-    static unsigned long _startMillis = millis();
-    do {
-        c = Serial.peek();
-        if(c >= 0) {
-            return c;
-        }
-    } while(millis() - _startMillis < Serial.getTimeout());
-    return -1;     // -1 indicates timeout
+	int c;
+	static unsigned long _startMillis = millis();
+	do {
+		c = Serial.peek();
+		if(c >= 0) {
+			return c;
+		}
+	} while(millis() - _startMillis < Serial.getTimeout());
+	return -1;     // -1 indicates timeout
 }
 
 size_t serialReadLine(char *buffer, size_t length)
 {
-    if(length < 1) {
-        return 0;
-    }
-    size_t index = 0;
-    while(index < length) {
-        int c = serialTimedRead();
-        if(c < 0 || c == '\n') {
-            break;
-        } else if(c == '\r' && serialTimedPeak() == '\n') {
+	if(length < 1) {
+		return 0;
+	}
+	size_t index = 0;
+	while(index < length) {
+		int c = serialTimedRead();
+		if(c < 0 || c == '\n') {
+			break;
+		} else if(c == '\r' && serialTimedPeak() == '\n') {
 			Serial.read(); break;
 		}
-        *buffer++ = (char) c;
-        index++;
-    }
-    return index; // return number of characters, not including null terminator
+		*buffer++ = (char) c;
+		index++;
+	}
+	return index; // return number of characters, not including null terminator
 }
 
 uint16_t closeMenu(uint16_t currState)
 {
-	
+	Serial.println("Exited Menu. Press 'm' to reopen it.");
 	return 0;
 }
 
