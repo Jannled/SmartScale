@@ -23,5 +23,8 @@
         "streambuf": "cpp",
         "algorithm": "cpp",
         "optional": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "ssid"
+    ]
 }

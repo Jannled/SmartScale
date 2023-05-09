@@ -74,7 +74,7 @@ uint16_t printMenu(uint16_t currState)
 
 uint16_t menuWaitForInput(uint16_t currState)
 {
-	// NOTE: Fast ACII to number conversion by subtracting the offset of '0'
+	// NOTE: Fast ASCII to number conversion by subtracting the offset of '0'
 	// 3+atoi(Serial.readStringUntil('\n').c_str())
 	uint16_t userInput = Serial.read() - '0';
 

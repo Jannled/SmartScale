@@ -83,14 +83,37 @@ void setup()
 	/* --- Init WiFi and Webserver --- */
 	//WiFi.setHostname("SmartKitchenScale");
 	WiFi.begin(); // Empty SSID and password should mean this thing will reconnect to the last known network
+
+	// Endpoint 404
 	server.onNotFound(notFound);
+
+	// Endpoint / aka index.html
 	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 		#ifdef ENABLE_ALL_SERIAL
 		Serial.printf("[Web] %8lu: %d %s %s \n", millis(), 200, request->methodToString(), request->url().c_str());
 		#endif
-		// WARNING: THE STRING NEEDS TO BE \0 TERMIANTED!!!
+		// WARNING: THE STRING NEEDS TO BE \0 TERMINATED!!!
         request->send(200, "text/html", (const char*) index_html);
     });
+
+	// Endpoint /connect
+	server.on("/connect", HTTP_POST, [](AsyncWebServerRequest *request){
+		if(!request->hasParam("ssid", true) || !request->hasParam("pswd", true))
+			return request->send(400, "text/html", (const char*) "Missing parameter");
+
+		request->send(200, "text/html", (const char*) "OK");
+
+		char ssid[32] = {0};
+		strncpy(ssid, request->getParam("ssid")->value().c_str(), 31);
+
+		char passwd[64] = {0};
+		strncpy(passwd, request->getParam("pswd")->value().c_str(), 63);
+
+		// Don't assume that ESP32s Web library handles string length of 32/64 and missing \0 characters correctly
+		WiFi.begin(ssid, passwd);
+	});
+
+	// Start the server
 	server.begin();
 
 	/* --- Init Websocket --- */
@@ -152,7 +175,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
 	AwsFrameInfo *info = (AwsFrameInfo *)arg;
 	if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT)
 	{
-		data[len] = 0; // Propably to \0 terminate the String
+		data[len] = 0; // Probably to \0 terminate the String
 		if (strcmp((char *)data, "tare") == 0)
 		{
 			tare();
