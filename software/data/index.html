@@ -20,8 +20,10 @@
 		body {
 			margin: 0;
 			position: relative;
-			min-height: inherit;
+			min-height: 100vh;
 			font-size: large;
+			padding-bottom: 30px;
+			box-sizing: border-box;
 		}
 
 		h1 {
@@ -114,6 +116,19 @@
 			margin: 10px;
 		}
 
+		input:active {
+			border: 2px solid #c24400;
+			border-radius: 2px;
+		}
+
+		dt, dd { 
+			display: inline-block;
+		}
+
+		dt::after {
+			content: ": ";
+		}
+
 		.gewicht {
 			margin: 0 auto;
 			text-align: right;
@@ -145,13 +160,17 @@
 			border: 0;
 			position: absolute; 
 			right: 0px; 
-			top: 0px;
+			top: 5px;
 			background-color: transparent;
 			min-width: none;
 		}
 
 		.settingsButton:hover {
 			background-color: #0f8b8d;
+		}
+
+		.delButton:hover {
+			color: red;
 		}
 	</style>
 </head>
@@ -161,7 +180,7 @@
 		<h1>SmartScale</h1>
 		<button class="settingsButton" onclick="showSettings()">
 			<!-- https://www.svgrepo.com/svg/66083/cogwheel -->
-			<svg fill="#ffffff" height="42px" width="42px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 512 512">
+			<svg fill="#ffffff" height="32px" width="32px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 512 512">
 				<g>
 				  <g>
 					<g>
@@ -215,12 +234,37 @@
 					<button type="submit" onclick="">Verbinden</button>
 					<button type="button" onclick="refreshWifiNetworks()">Aktualisieren</button>
 				</form>
+				<hr>
+				<dl>
+					<dt>IPv4</dt>
+					<dd>0.0.0.0</dd>
+					<br>
+					<dt>IPv6</dt>
+					<dd>0::0</dd>
+				</dl>
 			</p>
 		</section>
 
 		<section>
 			<h2>Kalibrierung</h2>
-			<p>foo bar</p>
+			<p>
+				<button>Offset kalibrieren</button>
+				<form>
+					<label><input type="number" value="1000">g</label>
+					<br>
+					<button>Gain kalibrieren</button>
+				</form>
+				<hr>
+				<div>Offset: xxx, Gain: xxx </div>
+			</p>
+		</section>
+
+
+		<section>
+			<h2>Wäägezelle</h2>
+			<p>
+				<button>HX711 Off</button>
+			</p>
 		</section>
 
 		<button onclick="leaveSettings()">Einstellungen verlassen</button>
@@ -277,6 +321,21 @@
 
 		function onTare() 
 		{
+			addTareEntry();
+
+			try
+			{
+				websocket.send('tare');
+			}
+			catch(e)
+			{
+				console.log(e);
+				showErrorMessage("Tare konnte nicht an die Waage gesendet werden!");
+			}
+		}
+
+		function addTareEntry()
+		{
 			const table = document.getElementById('tareHistory');
 			
 			let tr = document.createElement('tr');
@@ -288,19 +347,11 @@
 
 			let tdDel = document.createElement('td');
 			tdDel.innerText = 'Del';
+			tdDel.classList.add('delButton');
+			tdDel.onclick = () => table.removeChild(tr);
 
 			tr.append(tdName, tdGramm, tdDel);
 			table.appendChild(tr);
-			
-			try
-			{
-				websocket.send('tare');
-			}
-			catch(e)
-			{
-				console.log(e);
-				showErrorMessage("Tare konnte nicht an die Waage gesendet werden!");
-			}
 		}
 
 		function showErrorMessage(message)
