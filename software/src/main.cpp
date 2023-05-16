@@ -177,9 +177,13 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
 	{
 		data[len] = 0; // Probably to \0 terminate the String
 		if (strcmp((char *)data, "tare") == 0)
-		{
 			tare();
-		}
+		else if (strcmp((char *)data, "gain") == 0)
+			calibrateGain();
+		else if (strcmp((char *)data, "offset") == 0)
+			calibrateOffset();
+		else if (strcmp((char *)data, "save") == 0)
+			saveCalibration();
 	}
 }
 
@@ -216,6 +220,24 @@ String processor(const String &var)
 	}
 
 	return ">>NONE<<";
+}
+
+void calibrateGain()
+{
+	int knownReference = Serial.parseInt();
+	float measurement = hx711.get_units(10);
+	divider = measurement / (float) knownReference;
+	hx711.set_scale(divider);
+}
+
+void calibrateOffset()
+{
+	hx711.set_offset(hx711.read_average(10));
+}
+
+void saveCalibration()
+{
+
 }
 
 void tare() {
