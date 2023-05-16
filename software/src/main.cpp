@@ -19,6 +19,9 @@ unsigned long time01 = millis();
 
 bool ledState = false;
 
+#define TOUCH_PIN T9
+touch_value_t touchThreshold = 40;
+
 /**
  * @brief Handle 404 for the webserver
  * 
@@ -222,5 +225,29 @@ void tare() {
 	hx711.tare();
 	#ifdef ENABLE_ALL_SERIAL
 	Serial.printf("Tare, new offset is %.ld\n", hx711.get_offset());
+	#endif
+}
+
+void shutdown()
+{
+	// Determine a good threshold value
+	touchThreshold = touchRead(TOUCH_PIN) + 10;
+	touchAttachInterrupt(TOUCH_PIN, callback, touchThreshold);
+
+	//Configure Touchpad as wakeup source
+	esp_sleep_enable_touchpad_wakeup();
+
+	#ifdef ENABLE_ALL_SERIAL
+	Serial.println("Entering deep sleep");
+	#endif
+
+	//Go to sleep now
+	esp_deep_sleep_start();
+}
+
+void callback()
+{
+	#ifdef ENABLE_ALL_SERIAL
+	Serial.println("Touch detected!");
 	#endif
 }

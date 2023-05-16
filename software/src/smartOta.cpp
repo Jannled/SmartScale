@@ -6,15 +6,12 @@
 #include <ArduinoOTA.h>
 
 /*
-	// The file only contains the password for the OTA updater and is exluded by .gitignore
+	// The file only contains the password for the OTA updater and is excluded by .gitignore
 	#ifndef OTA_PASSWD
 	#define OTA_PASSWD "YourPassword"
 	#endif
 */
 #include "secrets.h"
-
-const char *ssid = "..........";
-const char *password = "..........";
 
 void setupOTA()
 {
