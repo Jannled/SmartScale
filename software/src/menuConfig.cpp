@@ -111,8 +111,8 @@ uint16_t calibrateScale(uint16_t currState)
 			internalState = 1;
 			if(Serial.read() == '\n')
 			{
-				offset = hx711.read_average(10);
-				hx711.set_offset(offset);
+				// Call HX711 utility function in main to calibrate offset
+				offset = calibrateOffset();
 				delay(100);
 			}
 			else
@@ -125,11 +125,11 @@ uint16_t calibrateScale(uint16_t currState)
 			internalState = 3;
 			if((Serial.peek() >= '0' && Serial.peek() <= '9') || Serial.peek() == '+' || Serial.peek() == '-')
 			{
+				// Read in grams from Serial console
 				int knownReference = Serial.parseInt();
-				float measurement = hx711.get_units(10);
-				Serial.printf("%.2f / %d\n", measurement, knownReference);
-				divider = measurement / (float) knownReference;
-				hx711.set_scale(divider);
+
+				// Call HX711 utility function in main to save the calibration to EEPROM
+				divider = calibrateGain(knownReference);
 				Serial.printf("[Calibration] Current measurement %.2fg with %.2f as divider.\n", hx711.get_units(10), divider);
 				internalState = 2;
 			}
@@ -143,19 +143,9 @@ uint16_t calibrateScale(uint16_t currState)
 				return 1;
 			}
 
-			Serial.printf("Calibration done. Offset: %ld, Divider: %.2f.\n", offset, divider);
-			EEPROM.writeLong(ADDR_OFFSET, offset);
-			EEPROM.writeFloat(ADDR_DIVIDER, divider);
-			delay(200); // Neccesary to save
-			EEPROM.commit();
-			Serial.printf("Values written to EEPROM address %d-%d and %d-%d.\n", ADDR_OFFSET, ADDR_OFFSET+sizeof(offset), ADDR_DIVIDER, ADDR_DIVIDER+sizeof(offset));
+			// Call HX711 utility function in main to save the calibration to EEPROM
+			saveCalibration();
 			internalState = 0;
-
-			long hx711_offset = 0;
-			float hx711_divider = 0.0f;
-			EEPROM.get(ADDR_OFFSET, hx711_offset);
-			EEPROM.get(ADDR_DIVIDER, hx711_divider);
-			Serial.printf("%ld, %.2f\n", hx711_offset, hx711_divider);
 			return 1;
 		}
 

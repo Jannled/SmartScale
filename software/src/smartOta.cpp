@@ -38,7 +38,7 @@ void setupOTA()
 				type = "filesystem";
 
 			// NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-			Serial.println("Start updating " + type);
+			Serial.println("[OTA] Start updating " + type);
 		})
 		.onEnd([]() {
 			Serial.println("\nEnd"); 
@@ -48,21 +48,31 @@ void setupOTA()
 		})
 		.onError([](ota_error_t error) {
 			Serial.printf("Error[%u]: ", error);
-			if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-			else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-			else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-			else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-			else if (error == OTA_END_ERROR) Serial.println("End Failed"); 
+			if (error == OTA_AUTH_ERROR) Serial.println("[OTA] Auth Failed");
+			else if (error == OTA_BEGIN_ERROR) Serial.println("[OTA] Begin Failed");
+			else if (error == OTA_CONNECT_ERROR) Serial.println("[OTA] Connect Failed");
+			else if (error == OTA_RECEIVE_ERROR) Serial.println("[OTA] Receive Failed");
+			else if (error == OTA_END_ERROR) Serial.println("[OTA] End Failed"); 
 		});
 
-	ArduinoOTA.begin();
+	Serial.println("[OTA] Configured");
+}
 
-	Serial.println("Ready");
-	Serial.print("IP address: ");
+void startOTA()
+{
+	if(WiFi.waitForConnectResult() != WL_CONNECTED)
+	{
+		Serial.println("[OTA] Unable to start, no network connectivity!");
+		return;
+	}
+
+	ArduinoOTA.begin();
+	Serial.println("[OTA] Ready");
+	Serial.print("[OTA] IP address: ");
 	Serial.println(WiFi.localIP());
 }
 
 void loopOTA()
 {
-	ArduinoOTA.handle();
+	//ArduinoOTA.handle();
 }

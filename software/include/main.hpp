@@ -8,7 +8,7 @@
 
 // Enable or disable some features
 #define ENABLE_ALL_SERIAL
-// #define ENABLE_OTA
+#define ENABLE_OTA
 
 // Pin definitions
 #define HX711_DOUT 25
@@ -38,5 +38,13 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
 String processor(const String &var);
 
 void tare();
+
+float calibrateGain(unsigned int knownReference);
+long calibrateOffset();
+void saveCalibration();
+
+void callback();
+
+bool createHotspot();
 
 #endif // SMARTSCALE_MAIN_H
