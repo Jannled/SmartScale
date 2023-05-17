@@ -1,14 +1,25 @@
+/**
+ * @author Jannled
+ * 
+ * https://stackoverflow.com/questions/59866735/converting-html-page-into-array-of-hexadecimal-values-for-use-in-an-arduino-serv
+ * 
+ */
+
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <WiFi.h>
 
 #include "main.hpp"
 #include "menuConfig.hpp"
-#include "smartOta.hpp"
+
 #include "index.html.h"
 #include "secrets.h"
 
 #include "math.h"
+
+#ifdef ENABLE_OTA
+#include "smartOta.hpp"
+#endif
 
 HX711 hx711;
 AsyncWebServer server(80);
@@ -95,7 +106,7 @@ void setup()
 
 	/* --- Init WiFi and Webserver --- */
 	//WiFi.setHostname("SmartKitchenScale");
-	WiFi.begin(); // Empty SSID and password should mean this thing will reconnect to the last known network
+	//WiFi.begin(); // Empty SSID and password should mean this thing will reconnect to the last known network
 
 	// Endpoint 404
 	server.onNotFound(notFound);
@@ -106,7 +117,7 @@ void setup()
 		Serial.printf("[Web] %8lu: %d %s %s \n", millis(), 200, request->methodToString(), request->url().c_str());
 		#endif
 		// WARNING: THE STRING NEEDS TO BE \0 TERMINATED!!!
-        request->send(200, "text/html", (const char*) index_html);
+        request->send(200, "text/html", (const char*) data_index_html_gz);
     });
 
 	// Endpoint /connect
@@ -166,7 +177,9 @@ void setup()
 	snprintf(ssidAP, 32, "SmartScale-%02X%02X", mac[4], mac[5]);
 
 	// Try to start the OTA listener. Method is blocking until a WiFi state is established
+	#ifdef ENABLE_OTA
 	startOTA();
+	#endif
 }
 
 /**
@@ -224,6 +237,8 @@ void loop()
 		createHotspot();
 		Serial.print("[WiFi] HotSpot IP: ");
 		Serial.println(WiFi.softAPIP());
+		Serial.println(WiFi.status());
+		Serial.println(WiFi.getMode());
 	}
 
 	#ifdef ENABLE_ALL_SERIAL
@@ -384,6 +399,8 @@ bool createHotspot()
 	delay(100);
 	#endif
 
+	WiFi.disconnect();
+	WiFi.mode(WIFI_AP);
 	enabledHotspot = WiFi.softAP(ssidAP, AP_PASSWD);
 	WiFi.softAPgetStationNum();
 	return enabledHotspot;

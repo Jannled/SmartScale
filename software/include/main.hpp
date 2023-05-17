@@ -8,7 +8,7 @@
 
 // Enable or disable some features
 #define ENABLE_ALL_SERIAL
-#define ENABLE_OTA
+//#define ENABLE_OTA
 
 // Pin definitions
 #define HX711_DOUT 25
