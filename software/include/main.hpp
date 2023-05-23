@@ -11,8 +11,8 @@
 //#define ENABLE_OTA
 
 // Pin definitions
-#define HX711_DOUT 25
-#define HX711_SCK 26
+#define HX711_DOUT 16
+#define HX711_SCK 17
 
 #ifndef LED_BUILTIN
 #define LED_BUILTIN 2
@@ -32,6 +32,8 @@ extern float currentWeight;
 
 extern bool ledState;
 
+void startWebserver();
+
 void notifyClients();
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len);
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len);
@@ -46,5 +48,7 @@ void saveCalibration();
 void callback();
 
 bool createHotspot();
+bool connectToWiFi(const char *ssid, const char *passphrase, const int32_t channel = 0);
+bool connectToWiFi(const String &ssid, const String &passphrase, const int32_t channel = 0);
 
 #endif // SMARTSCALE_MAIN_H

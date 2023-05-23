@@ -43,6 +43,8 @@ touch_value_t touchThreshold = 40;
 
 char ssidAP[32] = "SmartScale";
 
+bool webserverStarted = false;
+
 /**
  * @brief Handle 404 for the webserver
  * 
@@ -101,12 +103,35 @@ void setup()
 	printMenuInfo();
 	#endif
 
+	const bool hx711IsReady = hx711.wait_ready_retry(3, 500);
+	#ifdef ENABLE_ALL_SERIAL
+	if(!hx711IsReady)
+		Serial.println("[HX711] FATAL ERROR, NO COMMUNICATION WITH THE IC!");
+	#endif
+
 	// Wait for the modem to become ready
 	delay(1500);
 
 	/* --- Init WiFi and Webserver --- */
 	//WiFi.setHostname("SmartKitchenScale");
 	//WiFi.begin(); // Empty SSID and password should mean this thing will reconnect to the last known network
+
+	// Add last two digits of MAC address to AP-SSID 01:34:67:9A:CD:F0
+	uint8_t mac[6];
+	WiFi.macAddress(mac);
+	snprintf(ssidAP, 32, "SmartScale-%02X%02X", mac[4], mac[5]);
+
+	// Try to start the OTA listener. Method is blocking until a WiFi state is established
+	#ifdef ENABLE_OTA
+	startOTA();
+	#endif
+}
+
+void startWebserver()
+{
+	#ifdef ENABLE_ALL_SERIAL
+	Serial.println("[Web] Starting Webserver");
+	#endif
 
 	// Endpoint 404
 	server.onNotFound(notFound);
@@ -117,7 +142,7 @@ void setup()
 		Serial.printf("[Web] %8lu: %d %s %s \n", millis(), 200, request->methodToString(), request->url().c_str());
 		#endif
 		// WARNING: THE STRING NEEDS TO BE \0 TERMINATED!!!
-        request->send(200, "text/html", (const char*) data_index_html_gz);
+        request->send(200, "text/html", (const char*) data_index_html);
     });
 
 	// Endpoint /connect
@@ -125,19 +150,31 @@ void setup()
 		if(!request->hasParam("ssid", true) || !request->hasParam("pswd", true))
 			return request->send(400, "text/html", (const char*) "Missing parameter");
 
-		request->send(200, "text/html", (const char*) "OK");
+		request->send(200);
 
-		char ssid[32] = {0};
-		strncpy(ssid, request->getParam("ssid")->value().c_str(), 31);
+		//char ssid[32] = {0};
+		//WiFi.begin()
+		//strncat(ssid, request->getParam("ssid")->value(), 31);
+		//strncpy(ssid, request->getParam("ssid")->value().c_str(), 31);
 
-		char passwd[64] = {0};
-		strncpy(passwd, request->getParam("pswd")->value().c_str(), 63);
+		//char passwd[64] = {0};
+		//strncpy(passwd, request->getParam("pswd")->value().c_str(), 63);
 
-		// Don't assume that ESP32s Web library handles string length of 32/64 and missing \0 characters correctly
-		#ifdef ENABLE_ALL_SERIAL
-		Serial.printf("[Web] Trying to connect to \"%s\"...", ssid);
-		#endif
-		WiFi.begin(ssid, passwd);
+		//// Don't assume that ESP32s Web library handles string length of 32/64 and missing \0 characters correctly
+		//#ifdef ENABLE_ALL_SERIAL
+		//Serial.printf("[Web] Trying to connect to \"%.32s\"...", ssid);
+		//#endif
+
+		AsyncWebParameter* ssid = request->getParam("ssid", true);
+		AsyncWebParameter* passwd = request->getParam("pswd", true);
+
+		if(ssid == nullptr || passwd == nullptr)
+		{
+			Serial.println("ERROR ERROR");
+			return;
+		}
+
+		connectToWiFi(ssid->value(), passwd->value());
 	});
 
 	// Endpoint /calibrate
@@ -171,15 +208,7 @@ void setup()
 	ws.onEvent(onEvent);
 	server.addHandler(&ws);
 
-	// Add last two digits of MAC address to AP-SSID 01:34:67:9A:CD:F0
-	uint8_t mac[6];
-	WiFi.macAddress(mac);
-	snprintf(ssidAP, 32, "SmartScale-%02X%02X", mac[4], mac[5]);
-
-	// Try to start the OTA listener. Method is blocking until a WiFi state is established
-	#ifdef ENABLE_OTA
-	startOTA();
-	#endif
+	webserverStarted = true;
 }
 
 /**
@@ -204,14 +233,20 @@ void loop()
 	}
 	lastWiFiState = wifiState;
 
-	ws.cleanupClients();
+	if(webserverStarted)
+		ws.cleanupClients();
 
 	// Get current timestamp since start
 	unsigned long currTime = millis();
 
 	// Write time of last connection
 	if(wifiState == WL_CONNECTED)
+	{
 		time03 = currTime;
+		
+		if(!webserverStarted)
+			startWebserver();
+	}
 
 	// Send weight updates in fixed time intervals
 	if(abs((long) (currTime - time01)) > 500)
@@ -226,19 +261,16 @@ void loop()
 	{
 		#ifdef ENABLE_ALL_SERIAL
 		Serial.println("SmartScale was inactive for 20min, shutting down!");
+		delay(100);
 		#endif
 		//shutdown();
 	}
 
 	// If unconnected for too long, create AP
-	if(abs((long) (currTime - time03)) > 40000) // 40sec
+	if(abs((long) (currTime - time03)) > 20000) // 20sec
 	{
 		time03 = currTime;
 		createHotspot();
-		Serial.print("[WiFi] HotSpot IP: ");
-		Serial.println(WiFi.softAPIP());
-		Serial.println(WiFi.status());
-		Serial.println(WiFi.getMode());
 	}
 
 	#ifdef ENABLE_ALL_SERIAL
@@ -252,7 +284,8 @@ void loop()
  */
 void notifyClients()
 {
-	ws.textAll(String((int) currentWeight));
+	if(ws.availableForWriteAll())
+		ws.textAll(String((int) currentWeight));
 }
 
 /**
@@ -354,7 +387,7 @@ void saveCalibration()
 void tare() {
 	hx711.tare();
 	#ifdef ENABLE_ALL_SERIAL
-	Serial.printf("Tare, new offset is %.ld\n", hx711.get_offset());
+	Serial.printf("Tare, new offset is %.ld.\n", hx711.get_offset());
 	#endif
 }
 
@@ -365,7 +398,7 @@ void shutdown()
 	touchAttachInterrupt(TOUCH_PIN, callback, touchThreshold);
 
 	//Configure Touchpad as wakeup source
-	esp_sleep_enable_touchpad_wakeup();
+	//esp_sleep_enable_touchpad_wakeup();
 
 	#ifdef ENABLE_ALL_SERIAL
 	Serial.println("Entering deep sleep");
@@ -400,8 +433,28 @@ bool createHotspot()
 	#endif
 
 	WiFi.disconnect();
-	WiFi.mode(WIFI_AP);
+	WiFi.mode(WIFI_AP_STA);
 	enabledHotspot = WiFi.softAP(ssidAP, AP_PASSWD);
-	WiFi.softAPgetStationNum();
+
+	#ifdef ENABLE_ALL_SERIAL
+	Serial.print("[WiFi] HotSpot IP: ");
+	Serial.println(WiFi.softAPIP());
+	#endif
+
+	if(enabledHotspot && !webserverStarted)
+		startWebserver();
+
 	return enabledHotspot;
+}
+
+bool connectToWiFi(const char *ssid, const char *passphrase, const int32_t channel)
+{
+	WiFi.disconnect(false, true);
+	return WiFi.begin(ssid, passphrase, channel);
+}
+
+bool connectToWiFi(const String &ssid, const String &passphrase, const int32_t channel)
+{
+	WiFi.disconnect(false, true);
+	return WiFi.begin(ssid, passphrase, channel);
 }

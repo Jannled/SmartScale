@@ -6,9 +6,9 @@
         {
             "label": "Compress HTML into C-array",
             "type": "shell",
-            "command": "gzip -kf data/index.html && xxd -i data/index.html.gz > include/index.html.h",
+            "command": "xxd -i data/index.html > include/index.html.h",
             "windows": {
-                "command": "bash -c 'gzip -kf data/index.html && xxd -i data/index.html.gz > include/index.html.h'"
+                "command": "bash -c 'xxd -i data/index.html > include/index.html.h'"
             },
             "problemMatcher": []
         }

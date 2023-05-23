@@ -60,7 +60,7 @@ void setupOTA()
 
 void startOTA()
 {
-	if(WiFi.waitForConnectResult() != WL_CONNECTED)
+	if(true)//WiFi.waitForConnectResult() != WL_CONNECTED)
 	{
 		Serial.println("[OTA] Unable to start, no network connectivity!");
 		return;
