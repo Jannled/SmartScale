@@ -2,7 +2,8 @@
  * @author Jannled
  * 
  * https://stackoverflow.com/questions/59866735/converting-html-page-into-array-of-hexadecimal-values-for-use-in-an-arduino-serv
- * 
+ * https://esp32.com/viewtopic.php?t=22486
+ * https://randomnerdtutorials.com/esp32-touch-wake-up-deep-sleep/
  */
 
 #include <Arduino.h>
